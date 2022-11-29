@@ -31,6 +31,9 @@ public class TFIDFCalculator {
                 }
             }
         }
+        if (n == 0) {
+            throw new RuntimeException("Calculation problem!");
+        }
         return Math.log(docs.size() / n);
     }
 }

@@ -36,7 +36,7 @@ public class Indexer {
     }
 
     public void save(IndexDTO indexDTO) {
-        toDto(repository.save(fromDto(indexDTO)));
+        repository.save(fromDto(indexDTO));
     }
 
     private static boolean checkIfTokenMatch(String token, DocumentDTO document) {

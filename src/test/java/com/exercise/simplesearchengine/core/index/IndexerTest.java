@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
@@ -13,6 +14,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class IndexerTest {
@@ -68,6 +72,38 @@ class IndexerTest {
         for (int i = 0; i < 4; i++) {
             assertEquals(expected.getMatchingDocumentIds().get(i), result.getMatchingDocumentIds().get(i));
         }
+    }
+
+    @Test
+    void should_call_save_3_times() {
+        //given
+        List<IndexDTO> indexes = prepareListOfIndexes();
+
+        //when
+        indexer.saveAll(indexes);
+
+        //then
+        verify(repository, times(3)).save(any());
+    }
+
+    private List<IndexDTO> prepareListOfIndexes() {
+        return List.of(
+                IndexDTO.builder()
+                        .id("fox")
+                        .score(0.2d)
+                        .matchingDocumentIds(List.of("doc1", "doc2"))
+                        .build(),
+                IndexDTO.builder()
+                        .id("brown")
+                        .score(0.25d)
+                        .matchingDocumentIds(List.of("doc2", "doc3"))
+                        .build(),
+                IndexDTO.builder()
+                        .id("jumped")
+                        .score(0.15d)
+                        .matchingDocumentIds(List.of("doc3", "doc4"))
+                        .build()
+        );
     }
 
     private List<DocumentDTO> prepareListOfAllDocuments() {
