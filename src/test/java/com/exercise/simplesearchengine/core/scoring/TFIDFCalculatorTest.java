@@ -24,7 +24,7 @@ class TFIDFCalculatorTest {
         double expected = 0.1013662770270411d;
 
         //when
-        double result = calculator.tfIdf(doc, docs, term);
+        double result = calculator.score(doc, docs, term);
 
         //then
         assertEquals(expected, result);
@@ -36,7 +36,7 @@ class TFIDFCalculatorTest {
         List<List<String>> docs = prepareTokenizedDocs();
         String term = "lamp";
         double expected = 0.1013662770270411d;
-        assertThrows(RuntimeException.class, () -> calculator.tfIdf(doc, docs, term));
+        assertThrows(RuntimeException.class, () -> calculator.score(doc, docs, term));
     }
 
     private List<List<String>> prepareTokenizedDocs() {

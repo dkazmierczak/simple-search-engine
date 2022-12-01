@@ -1,20 +1,26 @@
 package com.exercise.simplesearchengine.core.document;
 
 
-import lombok.Builder;
+import com.exercise.simplesearchengine.core.index.Index;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
-@Table(name = "Document")
+@Entity
 @Data
-@Builder
+@NoArgsConstructor
 public class Document {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String docId;
+    private Long docId;
+
     @Column
-    private List<String> tokenizedContent;
+    private String content;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_doc")
+    private Index index;
+
 }

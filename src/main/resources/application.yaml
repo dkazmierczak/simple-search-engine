@@ -3,16 +3,22 @@ server:
 
 spring:
   datasource:
-    url: jdbc:h2:file:/data/demo
+    url: jdbc:h2:mem:memDb;DB_CLOSE_DELAY=-1
     username: test
     password: testPa$$word
     driverClassName: org.h2.Driver
     jpa:
       database-platform: org.hibernate.dialect.H2Dialect
       defer-datasource-initialization: true
+      hibernate:
+        ddl-auto: update
     h2:
-      console.enabled: true
+      console:
+        enabled: true
+        path: /h2
 
 logging:
   level:
     org.springframework: INFO
+
+

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.exercise.simplesearchengine.core.document.DocumentDTO.fromDto;
 import static com.exercise.simplesearchengine.core.document.DocumentDTO.toDto;
 
 @Service
@@ -21,17 +20,16 @@ public class DocumentService {
                 .collect(Collectors.toList());
     }
 
-    public DocumentDTO save(List<String> tokenized) {
-        return save(null, tokenized);
+    public DocumentDTO save(String content) {
+        return save(null, content);
     }
 
-    public DocumentDTO save(String id, List<String> tokenized) {
-        return toDto(
-                documentRepository.save(
-                        fromDto(DocumentDTO.builder()
-                                .docId(id)
-                                .tokenizedContent(tokenized)
-                                .build()))
-        );
+    public DocumentDTO save(String id, String content) {
+        Document document = new Document();
+        if (id != null) {
+            document.setDocId(Long.getLong(id));
+        }
+        document.setContent(content);
+        return toDto(documentRepository.save(document));
     }
 }
