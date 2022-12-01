@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.exercise.simplesearchengine.core.document.DocumentDTO.fromDto;
 import static com.exercise.simplesearchengine.core.document.DocumentDTO.toDto;
 
 @Service
@@ -28,7 +27,7 @@ public class DocumentService {
     public DocumentDTO save(String id, String content) {
         Document document = new Document();
         if (id != null) {
-            document.setDocId(id);
+            document.setDocId(Long.getLong(id));
         }
         document.setContent(content);
         return toDto(documentRepository.save(document));

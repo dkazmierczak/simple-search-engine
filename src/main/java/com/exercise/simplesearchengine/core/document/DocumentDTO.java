@@ -7,7 +7,7 @@ import lombok.Data;
 @Builder
 public class DocumentDTO {
 
-    private String docId;
+    private Long docId;
     private String content;
 
     public static DocumentDTO toDto(Document document) {

@@ -14,7 +14,7 @@ public class Document {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String docId;
+    private Long docId;
 
     @Column
     private String content;
