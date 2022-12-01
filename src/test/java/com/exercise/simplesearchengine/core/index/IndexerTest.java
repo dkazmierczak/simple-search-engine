@@ -63,7 +63,7 @@ class IndexerTest {
         IndexDTO expected = IndexDTO.builder()
                 .id(token)
                 .score(score)
-                .matchingDocumentIds(List.of("id1", "id2", "id3", "id4"))
+                .matchingDocumentIds(prepareListOfDocuments())
                 .build();
         when(tokenizer.tokenizing(any())).thenReturn(base.createTokenizedDocument());
 
@@ -91,22 +91,43 @@ class IndexerTest {
         verify(repository, times(3)).save(any());
     }
 
+    private List<DocumentDTO> prepareListOfDocuments() {
+        return List.of(
+                DocumentDTO.builder()
+                        .docId(1L)
+                        .content("the brown fox jumped over the brown dog")
+                        .build(),
+                DocumentDTO.builder()
+                        .docId(2L)
+                        .content("the brown fox jumped over the brown dog")
+                        .build(),
+                DocumentDTO.builder()
+                        .docId(3L)
+                        .content("the brown fox jumped over the brown dog")
+                        .build(),
+                DocumentDTO.builder()
+                        .docId(4L)
+                        .content("the brown fox jumped over the brown dog")
+                        .build()
+        );
+    }
+
     private List<IndexDTO> prepareListOfIndexes() {
         return List.of(
                 IndexDTO.builder()
                         .id("fox")
                         .score(0.2d)
-                        .matchingDocumentIds(List.of("doc1", "doc2"))
+                        .matchingDocumentIds(prepareListOfDocuments())
                         .build(),
                 IndexDTO.builder()
                         .id("brown")
                         .score(0.25d)
-                        .matchingDocumentIds(List.of("doc2", "doc3"))
+                        .matchingDocumentIds(prepareListOfDocuments())
                         .build(),
                 IndexDTO.builder()
                         .id("jumped")
                         .score(0.15d)
-                        .matchingDocumentIds(List.of("doc3", "doc4"))
+                        .matchingDocumentIds(prepareListOfDocuments())
                         .build()
         );
     }
@@ -114,19 +135,19 @@ class IndexerTest {
     private List<DocumentDTO> prepareListOfAllDocuments() {
         return List.of(
                 DocumentDTO.builder()
-                        .docId("id1")
+                        .docId(1L)
                         .content(base.prepareDocumentContent())
                         .build(),
                 DocumentDTO.builder()
-                        .docId("id2")
+                        .docId(2L)
                         .content(base.prepareDocumentContent())
                         .build(),
                 DocumentDTO.builder()
-                        .docId("id3")
+                        .docId(3L)
                         .content(base.prepareDocumentContent())
                         .build(),
                 DocumentDTO.builder()
-                        .docId("id4")
+                        .docId(4L)
                         .content(base.prepareDocumentContent())
                         .build()
         );

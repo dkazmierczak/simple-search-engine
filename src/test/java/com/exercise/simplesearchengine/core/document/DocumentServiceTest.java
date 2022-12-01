@@ -31,7 +31,7 @@ class DocumentServiceTest {
     void should_call_repository_save() {
         //given
         String content = base.prepareDocumentContent();
-        when(repository.save(any())).thenReturn(new Document("id", content));
+        when(repository.save(any())).thenReturn(new Document());
 
         //when
         service.save(content);
