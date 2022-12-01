@@ -2,11 +2,11 @@ package com.exercise.simplesearchengine.core.index;
 
 import com.exercise.simplesearchengine.Base;
 import com.exercise.simplesearchengine.core.document.DocumentDTO;
+import com.exercise.simplesearchengine.core.tokenizer.Tokenizer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
@@ -15,14 +15,16 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class IndexerTest {
 
     @Mock
     private IndexRepository repository;
+
+    @Mock
+    private Tokenizer tokenizer;
 
     @InjectMocks
     private Indexer indexer;
@@ -40,6 +42,8 @@ class IndexerTest {
                 .score(score)
                 .matchingDocumentIds(Collections.emptyList())
                 .build();
+
+        when(tokenizer.tokenizing(any())).thenReturn(base.createTokenizedDocument());
 
         //when
         IndexDTO result = indexer.buildIndex(token, score, allDocuments);
@@ -61,6 +65,7 @@ class IndexerTest {
                 .score(score)
                 .matchingDocumentIds(List.of("id1", "id2", "id3", "id4"))
                 .build();
+        when(tokenizer.tokenizing(any())).thenReturn(base.createTokenizedDocument());
 
         //when
         IndexDTO result = indexer.buildIndex(token, score, allDocuments);
@@ -110,19 +115,19 @@ class IndexerTest {
         return List.of(
                 DocumentDTO.builder()
                         .docId("id1")
-                        .tokenizedContent(base.createTokenizedDocument())
+                        .content(base.prepareDocumentContent())
                         .build(),
                 DocumentDTO.builder()
                         .docId("id2")
-                        .tokenizedContent(base.createTokenizedDocument())
+                        .content(base.prepareDocumentContent())
                         .build(),
                 DocumentDTO.builder()
                         .docId("id3")
-                        .tokenizedContent(base.createTokenizedDocument())
+                        .content(base.prepareDocumentContent())
                         .build(),
                 DocumentDTO.builder()
                         .docId("id4")
-                        .tokenizedContent(base.createTokenizedDocument())
+                        .content(base.prepareDocumentContent())
                         .build()
         );
     }

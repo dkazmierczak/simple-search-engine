@@ -25,10 +25,9 @@ public class StorageManager implements SearchEngine {
 
     @Override
     public void indexDocument(String id, String document) {
-        List<String> tokenized = tokenizer.tokenizing(document);
         DocumentDTO saved = id.isBlank()
-                ? documentService.save(tokenized)
-                : documentService.save(id, tokenized);
+                ? documentService.save(document)
+                : documentService.save(id, document);
         List<IndexDTO> scoredIndexes = scoreAndStoreIndexes(saved);
         indexer.saveAll(scoredIndexes);
     }
@@ -41,14 +40,15 @@ public class StorageManager implements SearchEngine {
     private List<IndexDTO> scoreAndStoreIndexes(DocumentDTO storedDocument) {
         List<DocumentDTO> allDocuments = documentService.getAllDocuments();
         List<List<String>> tokenizedDocuments = allDocuments.stream()
-                .map(DocumentDTO::getTokenizedContent)
+                .map(DocumentDTO::getContent)
+                .map(tokenizer::tokenizing)
                 .collect(Collectors.toList());
-        List<String> tokenizedContent = storedDocument.getTokenizedContent();
+        List<String> tokenizedContent = tokenizer.tokenizing(storedDocument.getContent());
 
         return tokenizedContent.stream()
                 .map(token ->
                         indexer.buildIndex(token,
-                                calculator.tfIdf(tokenizedContent, tokenizedDocuments, token),
+                                calculator.score(tokenizedContent, tokenizedDocuments, token),
                                 allDocuments))
                 .collect(Collectors.toList());
     }

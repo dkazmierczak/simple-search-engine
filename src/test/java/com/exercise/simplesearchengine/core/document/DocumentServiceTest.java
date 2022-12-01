@@ -30,11 +30,11 @@ class DocumentServiceTest {
     @Test
     void should_call_repository_save() {
         //given
-        List<String> tokenized = base.createTokenizedDocument();
-        when(repository.save(any())).thenReturn(new Document("id", tokenized));
+        String content = base.prepareDocumentContent();
+        when(repository.save(any())).thenReturn(new Document("id", content));
 
         //when
-        service.save(tokenized);
+        service.save(content);
 
         //then
         verify(repository, atMostOnce()).save(any());

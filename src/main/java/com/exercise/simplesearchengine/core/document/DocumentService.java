@@ -21,17 +21,16 @@ public class DocumentService {
                 .collect(Collectors.toList());
     }
 
-    public DocumentDTO save(List<String> tokenized) {
-        return save(null, tokenized);
+    public DocumentDTO save(String content) {
+        return save(null, content);
     }
 
-    public DocumentDTO save(String id, List<String> tokenized) {
-        return toDto(
-                documentRepository.save(
-                        fromDto(DocumentDTO.builder()
-                                .docId(id)
-                                .tokenizedContent(tokenized)
-                                .build()))
-        );
+    public DocumentDTO save(String id, String content) {
+        Document document = new Document();
+        if (id != null) {
+            document.setDocId(id);
+        }
+        document.setContent(content);
+        return toDto(documentRepository.save(document));
     }
 }

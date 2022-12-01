@@ -1,21 +1,25 @@
 package com.exercise.simplesearchengine.core.index;
 
-import lombok.Builder;
+import com.exercise.simplesearchengine.core.document.Document;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
-@Table
+@Entity
 @Data
-@Builder
+@NoArgsConstructor
 public class Index {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
+
     @Column
     private double score;
-    @JoinColumn
-    private List<String> matchingDocumentIds;
+
+    @OneToMany(mappedBy = "index")
+    private List<Document> matchingDocumentIds;
 }

@@ -1,6 +1,7 @@
 package com.exercise.simplesearchengine.core.index;
 
 import com.exercise.simplesearchengine.core.document.DocumentDTO;
+import com.exercise.simplesearchengine.core.tokenizer.Tokenizer;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -8,12 +9,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.exercise.simplesearchengine.core.index.IndexDTO.fromDto;
-import static com.exercise.simplesearchengine.core.index.IndexDTO.toDto;
 
 @Service
 @AllArgsConstructor
 public class Indexer {
 
+    private final Tokenizer tokenizer;
     private final IndexRepository repository;
 
     public IndexDTO buildIndex(String token, double score, List<DocumentDTO> allDocuments) {
@@ -24,10 +25,9 @@ public class Indexer {
                 .build();
     }
 
-    private List<String> createListOfDocumentsContainIds(String token, List<DocumentDTO> allDocuments) {
+    private List<DocumentDTO> createListOfDocumentsContainIds(String token, List<DocumentDTO> allDocuments) {
         return allDocuments.stream()
                 .filter(document -> checkIfTokenMatch(token, document))
-                .map(DocumentDTO::getDocId)
                 .collect(Collectors.toList());
     }
 
@@ -39,7 +39,7 @@ public class Indexer {
         repository.save(fromDto(indexDTO));
     }
 
-    private static boolean checkIfTokenMatch(String token, DocumentDTO document) {
-        return document.getTokenizedContent().stream().anyMatch(token::equals);
+    private boolean checkIfTokenMatch(String token, DocumentDTO document) {
+        return tokenizer.tokenizing(document.getContent()).stream().anyMatch(token::equals);
     }
 }

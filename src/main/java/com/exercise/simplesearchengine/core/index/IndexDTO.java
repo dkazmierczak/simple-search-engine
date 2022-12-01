@@ -1,10 +1,13 @@
 package com.exercise.simplesearchengine.core.index;
 
+import com.exercise.simplesearchengine.core.document.Document;
+import com.exercise.simplesearchengine.core.document.DocumentDTO;
 import com.findwise.IndexEntry;
 import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -12,22 +15,30 @@ public class IndexDTO implements IndexEntry {
 
     private String id;
     private double score;
-    private List<String> matchingDocumentIds;
+    private List<DocumentDTO> matchingDocumentIds;
 
     public static IndexDTO toDto(Index index) {
         return IndexDTO.builder()
                 .id(index.getId())
                 .score(index.getScore())
-                .matchingDocumentIds(index.getMatchingDocumentIds())
+                .matchingDocumentIds(prepareDTOList(index.getMatchingDocumentIds()))
                 .build();
     }
 
+    private static List<DocumentDTO> prepareDTOList(List<Document> matchingDocumentIds) {
+        return matchingDocumentIds.stream().map(DocumentDTO::toDto).collect(Collectors.toList());
+    }
+
     public static Index fromDto(IndexDTO dto) {
-        return Index.builder()
-                .id(dto.getId())
-                .score(dto.getScore())
-                .matchingDocumentIds(dto.getMatchingDocumentIds())
-                .build();
+        Index index = new Index();
+        index.setId(dto.getId());
+        index.setScore(dto.getScore());
+        index.setMatchingDocumentIds(prepareDocList(dto.getMatchingDocumentIds()));
+        return index;
+    }
+
+    private static List<Document> prepareDocList(List<DocumentDTO> matchingDocumentIds) {
+        return matchingDocumentIds.stream().map(DocumentDTO::fromDto).collect(Collectors.toList());
     }
 
     @Override

@@ -7,7 +7,7 @@ import java.util.List;
 @Service
 public class TFIDFCalculator {
 
-    public double tfIdf(List<String> doc, List<List<String>> docs, String term) {
+    public double score(List<String> doc, List<List<String>> docs, String term) {
         return tf(doc, term) * idf(docs, term);
 
     }
