@@ -21,18 +21,14 @@ public class Indexer {
         return IndexDTO.builder()
                 .id(token)
                 .score(score)
-                .matchingDocumentIds(createListOfDocumentsContainIds(token, allDocuments))
+                .matchingDocuments(createMatchingDocuments(token, allDocuments))
                 .build();
     }
 
-    private List<DocumentDTO> createListOfDocumentsContainIds(String token, List<DocumentDTO> allDocuments) {
+    private List<DocumentDTO> createMatchingDocuments(String token, List<DocumentDTO> allDocuments) {
         return allDocuments.stream()
                 .filter(document -> checkIfTokenMatch(token, document))
                 .collect(Collectors.toList());
-    }
-
-    public void saveAll(List<IndexDTO> scoredIndexes) {
-        scoredIndexes.forEach(this::save);
     }
 
     public void save(IndexDTO indexDTO) {
@@ -40,6 +36,10 @@ public class Indexer {
     }
 
     private boolean checkIfTokenMatch(String token, DocumentDTO document) {
-        return tokenizer.tokenizing(document.getContent()).stream().anyMatch(token::equals);
+        return tokenizer.tokenize(document.getContent()).stream().anyMatch(token::equals);
+    }
+
+    public List<IndexDTO> getAllIndexes() {
+        return repository.findAll().stream().map(IndexDTO::toDto).collect(Collectors.toList());
     }
 }

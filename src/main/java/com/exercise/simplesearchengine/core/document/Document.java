@@ -2,10 +2,12 @@ package com.exercise.simplesearchengine.core.document;
 
 
 import com.exercise.simplesearchengine.core.index.Index;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -19,8 +21,8 @@ public class Document {
     @Column
     private String content;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_doc")
-    private Index index;
+    @ManyToMany(mappedBy = "matchingDocuments")
+    @JsonIgnore
+    private List<Index> index;
 
 }

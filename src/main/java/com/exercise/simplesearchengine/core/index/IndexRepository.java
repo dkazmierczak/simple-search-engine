@@ -7,6 +7,5 @@ import java.util.List;
 
 @Repository
 public interface IndexRepository extends JpaRepository<Index, String> {
-
     List<Index> findAll();
 }

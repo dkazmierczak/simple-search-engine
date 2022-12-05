@@ -15,13 +15,13 @@ public class IndexDTO implements IndexEntry {
 
     private String id;
     private double score;
-    private List<DocumentDTO> matchingDocumentIds;
+    private List<DocumentDTO> matchingDocuments;
 
     public static IndexDTO toDto(Index index) {
         return IndexDTO.builder()
                 .id(index.getId())
                 .score(index.getScore())
-                .matchingDocumentIds(prepareDTOList(index.getMatchingDocumentIds()))
+                .matchingDocuments(prepareDTOList(index.getMatchingDocuments()))
                 .build();
     }
 
@@ -33,7 +33,7 @@ public class IndexDTO implements IndexEntry {
         Index index = new Index();
         index.setId(dto.getId());
         index.setScore(dto.getScore());
-        index.setMatchingDocumentIds(prepareDocList(dto.getMatchingDocumentIds()));
+        index.setMatchingDocuments(prepareDocList(dto.getMatchingDocuments()));
         return index;
     }
 

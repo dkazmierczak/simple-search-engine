@@ -5,14 +5,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class TFIDFCalculator {
+public class ScoreCalculator {
 
     public double score(List<String> doc, List<List<String>> docs, String term) {
-        return tf(doc, term) * idf(docs, term);
+        return countTf(doc, term) * countIdf(docs, term);
 
     }
 
-    private double tf(List<String> doc, String term) {
+    private double countTf(List<String> doc, String term) {
         double result = 0;
         for (String word : doc) {
             if (term.equalsIgnoreCase(word))
@@ -21,7 +21,7 @@ public class TFIDFCalculator {
         return result / doc.size();
     }
 
-    private double idf(List<List<String>> docs, String term) {
+    private double countIdf(List<List<String>> docs, String term) {
         double n = 0;
         for (List<String> doc : docs) {
             for (String word : doc) {

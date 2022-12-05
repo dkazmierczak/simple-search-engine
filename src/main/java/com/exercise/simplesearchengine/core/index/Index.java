@@ -4,10 +4,7 @@ import com.exercise.simplesearchengine.core.document.Document;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -21,6 +18,11 @@ public class Index {
     @Column
     private double score;
 
-    @OneToMany(mappedBy = "index")
-    private List<Document> matchingDocumentIds;
+    @ManyToMany
+    @JoinTable(
+            name = "INDEX_DOCUMENT",
+            joinColumns = {@JoinColumn(name = "INDEX_ID")},
+            inverseJoinColumns = {@JoinColumn(name = "DOCUMENT_ID")}
+    )
+    private List<Document> matchingDocuments;
 }
